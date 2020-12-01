@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react'
+
+export const API_URL = 'https://api.site.com'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    fetch(`${API_URL}/brands`)
+      .then((res) => res.json())
+      .then(setData)
+  }, [])
+
+  if (data?.message) {
+    return <div role="alert">{data.message}</div>
+  }
+
+  if (data?.data?.length === 0) {
+    return <p>No data</p>
+  }
+
+  return <div>{data ? <div>{data.data}</div> : null}</div>
 }
 
-export default App;
+export default App
